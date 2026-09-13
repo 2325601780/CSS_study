@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS 盒模型</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 40px;
+            line-height: 1.8;
+        }
+        h2 {
+            margin-top: 40px;
+            border-left: 5px solid #409eff;
+            padding-left: 10px;
+        }
+        .note {
+            color: #666;
+            background: #f5f7fa;
+            padding: 10px 15px;
+            border-radius: 4px;
+        }
+
+        /* ============================================================
+           一、盒模型的四个组成部分（从内到外）
+           content 内容 -> padding 内边距 -> border 边框 -> margin 外边距
+           ============================================================ */
+
+        /* 用背景色分层显示：margin 透明，用父容器背景来“衬托” */
+        .stage {
+            background: #fff3e0;            /* 橙色区域代表 margin */
+            display: inline-block;
+        }
+        .box {
+            width: 200px;                   /* content 宽度 */
+            height: 100px;                  /* content 高度 */
+            padding: 20px;                  /* 内边距：绿色 */
+            border: 10px solid #333;        /* 边框：黑色 */
+            margin: 30px;                   /* 外边距：橙色（透明，露出父背景） */
+            background: #409eff;            /* 内容区：蓝色 */
+            color: #fff;
+        }
+
+        /* ============================================================
+           二、标准盒模型（W3C） box-sizing: content-box（浏览器默认值）
+           元素实际占位宽度 = width + 左右padding + 左右border
+           本例：200 + 20*2 + 10*2 = 260px
+           ============================================================ */
+        .content-box {
+            box-sizing: content-box;        /* 默认值，可省略 */
+            width: 200px;
+            padding: 20px;
+            border: 10px solid #e74c3c;
+            background: #409eff;
+            color: #fff;
+        }
+
+        /* ============================================================
+           三、怪异盒模型（IE） box-sizing: border-box
+           width 已经包含了 content + padding + border
+           元素实际占位宽度 = width = 200px
+           真正的内容区宽度 = 200 - 20*2 - 10*2 = 140px
+           ============================================================ */
+        .border-box {
+            box-sizing: border-box;
+            width: 200px;
+            padding: 20px;
+            border: 10px solid #27ae60;
+            background: #409eff;
+            color: #fff;
+        }
+
+        .compare {
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+        .compare > div {
+            text-align: center;
+        }
+
+        /* 标尺：200px 宽，直观对比两个盒子的真实占位 */
+        .ruler {
+            width: 200px;
+            height: 6px;
+            background: #999;
+            margin: 8px 0;
+        }
+
+        /* ============================================================
+           四、外边距折叠（margin 塌陷）
+           上下两个块级元素的 margin 会发生重叠，取较大值，而不是相加
+           30px 与 20px 折叠后，间距为 30px
+           ============================================================ */
+        .m1 {
+            margin-bottom: 30px;
+            background: pink;
+        }
+        .m2 {
+            margin-top: 20px;
+            background: skyblue;
+        }
+    </style>
+</head>
+<body>
+    <h2>一、盒模型的组成</h2>
+    <p class="note">
+        从内到外：content（内容，蓝色）→ padding（内边距，绿色间隙）→
+        border（边框，黑色）→ margin（外边距，橙色区域，本身透明）
+    </p>
+    <div class="stage">
+        <div class="box">content 内容区 200 × 100</div>
+    </div>
+
+    <h2>二、两种盒模型对比（width 都设为 200px）</h2>
+    <div class="compare">
+        <div>
+            <p><b>标准盒模型 content-box</b><br>实际占位 = 200 + 40 + 20 = <b>260px</b></p>
+            <div class="ruler"></div>
+            <div class="content-box">content-box<br>宽度会“撑大”</div>
+        </div>
+        <div>
+            <p><b>怪异盒模型 border-box</b><br>实际占位 = <b>200px</b>（padding、border 往里挤）</p>
+            <div class="ruler"></div>
+            <div class="border-box">border-box<br>宽度始终 200px</div>
+        </div>
+    </div>
+    <p class="note">
+        重置样式推荐：* { box-sizing: border-box; } —— 设置 width 后加 padding/border
+        不会把盒子撑大，布局更直观。
+    </p>
+
+    <h2>三、外边距折叠（margin 塌陷）</h2>
+    <p class="note">
+        上下相邻块级元素的 margin 会重叠并取最大值：下盒 margin-bottom: 30px，
+        上盒 margin-top: 20px，实际间距只有 <b>30px</b>（左右 margin 不折叠）。
+    </p>
+    <div class="m1">我是上盒子，margin-bottom: 30px</div>
+    <div class="m2">我是下盒子，margin-top: 20px</div>
+</body>
+</html>

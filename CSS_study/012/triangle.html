@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS 画三角形</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 40px;
+        }
+        .demo {
+            display: flex;
+            gap: 60px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .item {
+            text-align: center;
+        }
+        .item p {
+            color: #666;
+        }
+
+        /* ===== 核心原理 ===== */
+        /* 一个宽高为 0 的盒子，四条边都很宽时，边框会拼成四个三角形 */
+        .box {
+            width: 0;
+            height: 0;
+            border: 50px solid;
+            border-color: red green blue orange; /* 上 右 下 左 四个三角形 */
+        }
+
+        /* ===== 方法一：border 法（兼容性最好，最常用）===== */
+
+        /* 向上的三角形：只保留下边框，其余透明 */
+        .triangle-up {
+            width: 0;
+            height: 0;
+            border-left: 50px solid transparent;
+            border-right: 50px solid transparent;
+            border-bottom: 80px solid pink;
+        }
+
+        /* 向下的三角形：只保留上边框 */
+        .triangle-down {
+            width: 0;
+            height: 0;
+            border-left: 50px solid transparent;
+            border-right: 50px solid transparent;
+            border-top: 80px solid skyblue;
+        }
+
+        /* 向左的三角形：只保留右边框 */
+        .triangle-left {
+            width: 0;
+            height: 0;
+            border-top: 50px solid transparent;
+            border-bottom: 50px solid transparent;
+            border-right: 80px solid orange;
+        }
+
+        /* 向右的三角形：只保留左边框 */
+        .triangle-right {
+            width: 0;
+            height: 0;
+            border-top: 50px solid transparent;
+            border-bottom: 50px solid transparent;
+            border-left: 80px solid green;
+        }
+
+        /* ===== 方法二：clip-path 法（写法简单，现代浏览器支持）===== */
+        .triangle-clip {
+            width: 100px;
+            height: 100px;
+            background: purple;
+            /* polygon 三个点：顶部中心、左下角、右下角 */
+            clip-path: polygon(50% 0, 0 100%, 100% 100%);
+        }
+    </style>
+</head>
+<body>
+    <h2>原理：宽高为 0 + 粗边框 = 四个三角形拼接</h2>
+    <div class="box"></div>
+
+    <h2>方法一：border 法（保留一条边，其余透明）</h2>
+    <div class="demo">
+        <div class="item">
+            <div class="triangle-up"></div>
+            <p>▲ 向上</p>
+        </div>
+        <div class="item">
+            <div class="triangle-down"></div>
+            <p>▼ 向下</p>
+        </div>
+        <div class="item">
+            <div class="triangle-left"></div>
+            <p>◀ 向左</p>
+        </div>
+        <div class="item">
+            <div class="triangle-right"></div>
+            <p>▶ 向右</p>
+        </div>
+    </div>
+
+    <h2>方法二：clip-path 法</h2>
+    <div class="triangle-clip"></div>
+</body>
+</html>
