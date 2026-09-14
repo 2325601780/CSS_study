@@ -1,6 +1,6 @@
 # 1. JS数组常用的方法有哪些？
 
-- 增: push,unshift,splice,解构,concat
+- 增: push,unshift,splice(原地修改),解构,concat
 - 删: pop,shift,splice,slice
 - 改:
 - 查: indexOf,LastIndexOf,find,findIndex,includes
@@ -42,3 +42,42 @@
       1. Object.prototype.toString()  ==>  [object Object]
       2. Array.prototype.toString()  ==>  数组中的元素用逗号拼接的字符串
       3. xxx.prototype.toString()  ==>  直接将值用引号包裹起来
+
+# 4. == 与 === 的区别？
+
+# 5. 聊一下js中的拷贝
+  - 是什么
+    js中类型分为
+    1. 原始类型：值存在调用栈中
+    2. 引用类型：值存在堆内存中，调用栈中存储的是引用地址值
+  - 拷贝是克隆一份原对象，分为深拷贝和浅拷贝
+    1. 浅拷贝：只将对象的第一层属性拷贝到新对象中，碰到引用地址也直接照搬
+    2. 深拷贝：层层拷贝，原始值照搬，引用类型的值会创建新的地址
+
+  - 特点：
+    1. 常见的浅拷贝方法：
+      1. 解构赋值
+      2. Object.assign()
+      3. slice()
+      4. concat()
+    2. 常见的深拷贝方法：
+      1. JSON.parse(JSON.stringify()) 不能拷贝函数，symbol, undefined, bigint. 不能处理循环引用
+      2. structuredClone()  除了函数和Symbol，其他类型都能深拷贝
+      3. MessageChannel()
+
+  - 实现原理
+    1. 浅拷贝: for in 循环遍历对象的属性，将属性赋值给新对象的属性
+    2. 深拷贝: for in 循环遍历对象的属性，将原始值拷贝到新对象中，引用类型做递归拷贝
+   
+
+# 6. 聊一下js中的闭包问题
+  - 是什么
+    根据作用域的查找规则，内部函数一定可以访问外部函数的变量，另外一个函数执行完毕后函数的执行上下文就会被销毁。当一个函数A内部定义了一个函数B，函数B引用了函数A中的变量，那么函数A在执行完毕后上下文就不会完全销毁，而是会将函数B需要的变量以一个集合的形式保存下来。这个集合就是闭包。
+
+  - 特点：
+    定义私有变量，防止全局变量污染，适合做模块化开发
+    内存泄漏
+
+  - 场景:
+    1. 封装模块
+    2. 防抖节流
